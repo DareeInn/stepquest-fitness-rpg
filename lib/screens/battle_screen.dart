@@ -100,7 +100,7 @@ class _BattleScreenState extends State<BattleScreen> {
             ),
             const SizedBox(height: 24),
             _fighterCard(
-              name: 'Level 5 Warrior',
+              name: 'Level ${GameState.player.level} Warrior',
               icon: Icons.shield,
               hp: playerHp,
               color: Colors.greenAccent,
