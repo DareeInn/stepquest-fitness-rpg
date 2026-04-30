@@ -156,6 +156,15 @@ class _BattleScreenState extends State<BattleScreen> {
               onPressed: resetBattle,
               child: const Text('Reset Battle'),
             ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.greenAccent,
+                foregroundColor: Colors.black,
+              ),
+              child: const Text('Return to Home'),
+            ),
           ],
         ),
       ),
