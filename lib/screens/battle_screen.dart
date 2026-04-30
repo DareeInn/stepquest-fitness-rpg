@@ -10,12 +10,37 @@ class BattleScreen extends StatefulWidget {
 }
 
 class _BattleScreenState extends State<BattleScreen> {
+  final List<Map<String, dynamic>> enemies = [
+    {
+      'name': 'Forest Goblin',
+      'icon': Icons.cruelty_free,
+      'color': Colors.redAccent,
+    },
+    {'name': 'Shadow Wolf', 'icon': Icons.pets, 'color': Colors.purpleAccent},
+    {
+      'name': 'Stone Golem',
+      'icon': Icons.terrain,
+      'color': Colors.orangeAccent,
+    },
+  ];
+
+  late Map<String, dynamic> currentEnemy;
   int playerHp = 100;
   int enemyHp = 100;
   int xpEarned = 0;
-  String battleMessage = 'A forest goblin blocks your path!';
-
+  String battleMessage = '';
   final Random _random = Random();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectRandomEnemy();
+    battleMessage = 'A [1m${currentEnemy['name']}[0m blocks your path!';
+  }
+
+  void _selectRandomEnemy() {
+    currentEnemy = enemies[_random.nextInt(enemies.length)];
+  }
 
   void attackEnemy() {
     if (enemyHp <= 0 || playerHp <= 0) return;
@@ -67,7 +92,8 @@ class _BattleScreenState extends State<BattleScreen> {
       playerHp = 100;
       enemyHp = 100;
       xpEarned = 0;
-      battleMessage = 'A forest goblin blocks your path!';
+      _selectRandomEnemy();
+      battleMessage = 'A ${currentEnemy['name']} blocks your path!';
     });
   }
 
@@ -86,10 +112,10 @@ class _BattleScreenState extends State<BattleScreen> {
         child: ListView(
           children: [
             _fighterCard(
-              name: 'Forest Goblin',
-              icon: Icons.cruelty_free,
+              name: currentEnemy['name'],
+              icon: currentEnemy['icon'],
               hp: enemyHp,
-              color: Colors.redAccent,
+              color: currentEnemy['color'],
             ),
             const SizedBox(height: 24),
             const Center(
