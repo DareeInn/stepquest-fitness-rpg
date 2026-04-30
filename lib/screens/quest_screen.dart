@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import '../models/game_state.dart';
 
-class QuestScreen extends StatelessWidget {
+class QuestScreen extends StatefulWidget {
   const QuestScreen({super.key});
 
-  static const int steps = 6542;
-  static const int goal = 10000;
+  @override
+  State<QuestScreen> createState() => _QuestScreenState();
+}
 
-  double get progress => steps / goal;
+class _QuestScreenState extends State<QuestScreen> {
+  int selectedQuest = 0;
+  bool rewardClaimed = false;
 
   @override
   Widget build(BuildContext context) {
+    final player = GameState.player;
+    final steps = player.stepsToday;
+    final goal = player.stepGoal;
+    final progress = steps / goal;
+
     return Scaffold(
       backgroundColor: const Color(0xFF101018),
       appBar: AppBar(
@@ -22,7 +31,6 @@ class QuestScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-
             // 🔵 Circular Progress
             SizedBox(
               height: 180,
@@ -54,9 +62,7 @@ class QuestScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
             // 📊 Goal Info
             Container(
               padding: const EdgeInsets.all(16),
@@ -72,27 +78,32 @@ class QuestScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
             // ✅ Quest List
             Expanded(
               child: ListView(
                 children: [
-                  _questItem("Walk 5,000 steps", true),
-                  _questItem("Reach 10,000 steps", false),
-                  _questItem("Burn 300 calories", false),
+                  _questItem(0, "Walk 5,000 steps", steps >= 5000),
+                  _questItem(1, "Reach 10,000 steps", steps >= 10000),
+                  _questItem(2, "Burn 300 calories", false),
                 ],
               ),
             ),
-
             // 🎁 Claim Button
             ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Reward Claimed! +100 XP")),
-                );
-              },
+              onPressed: rewardClaimed || !canClaimReward(steps)
+                  ? null
+                  : () {
+                      setState(() {
+                        rewardClaimed = true;
+                        GameState.addXp(100);
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Reward Claimed! +100 XP"),
+                        ),
+                      );
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
                 foregroundColor: Colors.black,
@@ -104,7 +115,19 @@ class QuestScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              child: const Text("Claim Reward", style: TextStyle(fontSize: 16)),
+              child: Text(
+                rewardClaimed ? "Reward Claimed" : "Claim Reward",
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.greenAccent,
+                foregroundColor: Colors.black,
+              ),
+              child: const Text('Return to Home'),
             ),
           ],
         ),
@@ -122,13 +145,30 @@ class QuestScreen extends StatelessWidget {
     );
   }
 
-  Widget _questItem(String title, bool completed) {
+  Widget _questItem(int index, String title, bool completed) {
     return ListTile(
       leading: Icon(
         completed ? Icons.check_circle : Icons.radio_button_unchecked,
         color: completed ? Colors.greenAccent : Colors.white30,
       ),
       title: Text(title),
+      selected: selectedQuest == index,
+      onTap: () {
+        setState(() {
+          selectedQuest = index;
+        });
+      },
+      trailing: selectedQuest == index
+          ? const Icon(Icons.arrow_right, color: Colors.greenAccent)
+          : null,
     );
+  }
+
+  bool canClaimReward(int steps) {
+    // Only allow claim if a quest is selected and completed
+    if (selectedQuest == 0 && steps >= 5000) return true;
+    if (selectedQuest == 1 && steps >= 10000) return true;
+    // Add more quest logic as needed
+    return false;
   }
 }
