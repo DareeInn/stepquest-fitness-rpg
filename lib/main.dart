@@ -5,6 +5,7 @@ import 'screens/home_screen.dart';
 import 'screens/quest_screen.dart';
 import 'screens/battle_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/edit_profile_screen.dart';
 
 void main() {
   runApp(const StepQuestApp());
@@ -30,6 +31,7 @@ class StepQuestApp extends StatelessWidget {
         '/quest': (context) => QuestScreen(),
         '/battle': (context) => BattleScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/edit-profile': (context) => const EditProfileScreen(),
       },
     );
   }

@@ -10,7 +10,8 @@ class QuestScreen extends StatefulWidget {
 
 class _QuestScreenState extends State<QuestScreen> {
   int selectedQuest = 0;
-  bool rewardClaimed = false;
+  // Track which quests have been claimed
+  final Set<int> claimedQuests = {};
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +92,13 @@ class _QuestScreenState extends State<QuestScreen> {
             ),
             // 🎁 Claim Button
             ElevatedButton(
-              onPressed: rewardClaimed || !canClaimReward(steps)
+              onPressed:
+                  claimedQuests.contains(selectedQuest) ||
+                      !canClaimReward(selectedQuest, steps)
                   ? null
                   : () {
                       setState(() {
-                        rewardClaimed = true;
+                        claimedQuests.add(selectedQuest);
                         GameState.addXp(100);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +119,9 @@ class _QuestScreenState extends State<QuestScreen> {
                 ),
               ),
               child: Text(
-                rewardClaimed ? "Reward Claimed" : "Claim Reward",
+                claimedQuests.contains(selectedQuest)
+                    ? "Reward Claimed"
+                    : "Claim Reward",
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -156,6 +161,7 @@ class _QuestScreenState extends State<QuestScreen> {
       onTap: () {
         setState(() {
           selectedQuest = index;
+          // Allow claiming again if switching to a new quest
         });
       },
       trailing: selectedQuest == index
@@ -164,10 +170,9 @@ class _QuestScreenState extends State<QuestScreen> {
     );
   }
 
-  bool canClaimReward(int steps) {
-    // Only allow claim if a quest is selected and completed
-    if (selectedQuest == 0 && steps >= 5000) return true;
-    if (selectedQuest == 1 && steps >= 10000) return true;
+  bool canClaimReward(int quest, int steps) {
+    if (quest == 0 && steps >= 5000) return true;
+    if (quest == 1 && steps >= 10000) return true;
     // Add more quest logic as needed
     return false;
   }

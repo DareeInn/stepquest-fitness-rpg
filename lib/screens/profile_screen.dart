@@ -79,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
 
             // ✏️ Button
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
                 foregroundColor: Colors.black,
