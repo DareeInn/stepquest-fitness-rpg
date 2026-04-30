@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/stat_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -37,9 +38,24 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // 📊 Stats
-            _statCard("🔥 Total Steps", "120,000"),
-            _statCard("⚔️ Battles Won", "12"),
-            _statCard("🏆 Achievements", "5"),
+            const StatCard(
+              title: 'Total Steps',
+              value: '120,000',
+              icon: Icons.directions_walk,
+              color: Colors.greenAccent,
+            ),
+            const StatCard(
+              title: 'Battles Won',
+              value: '12',
+              icon: Icons.shield,
+              color: Colors.redAccent,
+            ),
+            const StatCard(
+              title: 'Achievements',
+              value: '5',
+              icon: Icons.emoji_events,
+              color: Colors.amberAccent,
+            ),
 
             const SizedBox(height: 24),
 
@@ -71,24 +87,6 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _statCard(String title, String value) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A27),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-        ],
       ),
     );
   }
