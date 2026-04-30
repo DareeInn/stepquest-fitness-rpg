@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../widgets/stat_card.dart';
+import '../models/game_state.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final player = GameState.player;
     return Scaffold(
       backgroundColor: const Color(0xFF101018),
       appBar: AppBar(
@@ -20,33 +22,36 @@ class ProfileScreen extends StatelessWidget {
 
             // 👤 Profile Header
             Column(
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.greenAccent,
                   child: Icon(Icons.person, size: 40, color: Colors.black),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Text(
-                  "Darin",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  player.name,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                Text("Level 5 Warrior"),
+                Text("Level ${player.level} Warrior"),
               ],
             ),
 
             const SizedBox(height: 24),
 
             // 📊 Stats
-            const StatCard(
+            StatCard(
               title: 'Total Steps',
-              value: '120,000',
+              value: player.totalSteps.toString(),
               icon: Icons.directions_walk,
               color: Colors.greenAccent,
             ),
-            const StatCard(
+            StatCard(
               title: 'Battles Won',
-              value: '12',
+              value: player.battlesWon.toString(),
               icon: Icons.shield,
               color: Colors.redAccent,
             ),

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../models/game_state.dart';
 
 class BattleScreen extends StatefulWidget {
   const BattleScreen({super.key});
@@ -27,6 +28,8 @@ class _BattleScreenState extends State<BattleScreen> {
 
       if (enemyHp == 0) {
         xpEarned += 200;
+        GameState.addXp(200);
+        GameState.addBattleWin();
         battleMessage = 'Victory! You defeated the enemy and earned 200 XP.';
         return;
       }
@@ -50,6 +53,8 @@ class _BattleScreenState extends State<BattleScreen> {
 
       if (enemyHp == 0) {
         xpEarned += 250;
+        GameState.addXp(250);
+        GameState.addBattleWin();
         battleMessage = 'Special move finished the enemy! +250 XP earned.';
       } else {
         battleMessage = 'You used Step Strike and dealt 35 damage!';
