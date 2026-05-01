@@ -9,6 +9,7 @@ class PlayerStats {
     required this.streakDays,
     required this.battlesWon,
     required this.totalSteps,
+    required this.achievements,
   });
 
   final String name;
@@ -20,6 +21,7 @@ class PlayerStats {
   final int streakDays;
   final int battlesWon;
   final int totalSteps;
+  final List<String> achievements;
 
   double get xpProgress => currentXp / maxXp;
   double get stepProgress => stepsToday / stepGoal;
@@ -34,6 +36,7 @@ class PlayerStats {
     int? streakDays,
     int? battlesWon,
     int? totalSteps,
+    List<String>? achievements,
   }) {
     return PlayerStats(
       name: name ?? this.name,
@@ -45,6 +48,7 @@ class PlayerStats {
       streakDays: streakDays ?? this.streakDays,
       battlesWon: battlesWon ?? this.battlesWon,
       totalSteps: totalSteps ?? this.totalSteps,
+      achievements: achievements ?? this.achievements,
     );
   }
 }

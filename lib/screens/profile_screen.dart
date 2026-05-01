@@ -55,9 +55,9 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.shield,
               color: Colors.redAccent,
             ),
-            const StatCard(
+            StatCard(
               title: 'Achievements',
-              value: '5',
+              value: '${player.achievements.length}',
               icon: Icons.emoji_events,
               color: Colors.amberAccent,
             ),
@@ -71,9 +71,8 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            _achievement("First 10k Steps"),
-            _achievement("3-Day Streak"),
-            _achievement("First Battle Won"),
+            for (final achievement in player.achievements)
+              _achievement(achievement),
 
             const SizedBox(height: 30),
 
