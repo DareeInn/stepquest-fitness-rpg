@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/game_state.dart';
+import '../services/audio_service.dart';
 
 class QuestScreen extends StatefulWidget {
   const QuestScreen({super.key});
@@ -12,6 +13,12 @@ class _QuestScreenState extends State<QuestScreen> {
   int selectedQuest = 0;
   // Track which quests have been claimed
   final Set<int> claimedQuests = {};
+
+  @override
+  void initState() {
+    super.initState();
+    StepQuestAudioService.playTrack(MusicTrack.dashboard);
+  }
 
   @override
   Widget build(BuildContext context) {

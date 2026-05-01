@@ -2,9 +2,21 @@ import 'package:flutter/material.dart';
 import '../widgets/xp_progress_bar.dart';
 import '../models/game_state.dart';
 import '../models/player_stats.dart';
+import '../services/audio_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    StepQuestAudioService.playTrack(MusicTrack.dashboard);
+  }
 
   @override
   Widget build(BuildContext context) {

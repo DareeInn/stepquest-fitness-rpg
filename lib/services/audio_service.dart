@@ -1,5 +1,7 @@
 import 'package:just_audio/just_audio.dart';
 
+enum MusicTrack { intro, dashboard, battle }
+
 class StepQuestAudioService {
   StepQuestAudioService._();
 
@@ -7,19 +9,31 @@ class StepQuestAudioService {
 
   static double volume = 0.4;
   static bool isMuted = false;
-  static bool _initialized = false;
+  static MusicTrack? _currentTrack;
 
-  static Future<void> init() async {
-    if (_initialized) return;
+  static String _assetForTrack(MusicTrack track) {
+    switch (track) {
+      case MusicTrack.intro:
+        return 'assets/audio/stepquest_theme.mp3';
+      case MusicTrack.dashboard:
+        return 'assets/audio/dashboard_theme.mp3';
+      case MusicTrack.battle:
+        return 'assets/audio/battle_theme.mp3';
+    }
+  }
+
+  static Future<void> playTrack(MusicTrack track) async {
+    if (_currentTrack == track) return;
+
     try {
-      await _player.setAsset('assets/audio/stepquest_theme.mp3');
+      _currentTrack = track;
+      await _player.stop();
+      await _player.setAsset(_assetForTrack(track));
       await _player.setLoopMode(LoopMode.one);
-      await _player.setVolume(volume);
+      await _player.setVolume(isMuted ? 0 : volume);
       await _player.play();
-      _initialized = true;
-    } catch (error) {
-      // Prevent audio errors from blocking the app.
-      _initialized = false;
+    } catch (_) {
+      _currentTrack = null;
     }
   }
 

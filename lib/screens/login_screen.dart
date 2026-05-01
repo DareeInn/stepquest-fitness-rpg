@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import '../services/audio_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    StepQuestAudioService.playTrack(MusicTrack.intro);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +46,14 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      // TODO: Replace demo navigation with Firebase Authentication login.
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/home'),
+                      onPressed: () async {
+                        await StepQuestAudioService.playTrack(
+                          MusicTrack.dashboard,
+                        );
+                        if (context.mounted) {
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent,
                         foregroundColor: Colors.black,
@@ -52,8 +69,14 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/home'),
+                      onPressed: () async {
+                        await StepQuestAudioService.playTrack(
+                          MusicTrack.dashboard,
+                        );
+                        if (context.mounted) {
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      },
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.greenAccent,
                         padding: const EdgeInsets.symmetric(vertical: 16),

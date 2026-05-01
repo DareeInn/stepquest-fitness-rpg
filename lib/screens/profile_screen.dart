@@ -3,8 +3,19 @@ import '../widgets/stat_card.dart';
 import '../models/game_state.dart';
 import '../services/audio_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    StepQuestAudioService.playTrack(MusicTrack.dashboard);
+  }
 
   @override
   Widget build(BuildContext context) {
