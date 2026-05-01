@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/xp_progress_bar.dart';
 import '../models/game_state.dart';
+import '../models/player_stats.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -99,7 +100,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroCard(player) {
+  Widget _buildHeroCard(PlayerStats player) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
