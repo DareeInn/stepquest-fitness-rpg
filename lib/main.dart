@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'services/audio_service.dart';
-
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/quest_screen.dart';
 import 'screens/battle_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
+import 'screens/intro_video_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const StepQuestApp());
-  StepQuestAudioService.init();
 }
 
 class StepQuestApp extends StatelessWidget {
@@ -30,7 +28,8 @@ class StepQuestApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
+        '/': (context) => const IntroVideoScreen(),
+        '/login': (context) => const LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/quest': (context) => QuestScreen(),
         '/battle': (context) => BattleScreen(),
