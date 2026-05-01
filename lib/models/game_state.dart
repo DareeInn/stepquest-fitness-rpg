@@ -1,5 +1,7 @@
 import 'player_stats.dart';
 
+// Temporary local state for frontend development.
+// Later, Sanaul's Firebase layer can replace this with Firestore user data.
 class GameState {
   static PlayerStats player = const PlayerStats(
     name: "Darin",
@@ -36,6 +38,7 @@ class GameState {
     }
   }
 
+  // TODO: Save updated XP and level to Firestore after Firebase integration.
   static bool addXp(int amount) {
     int newXp = player.currentXp + amount;
     int newLevel = player.level;
@@ -55,6 +58,7 @@ class GameState {
     return leveledUp;
   }
 
+  // TODO: Save battle win count to Firestore after Firebase integration.
   static void addBattleWin() {
     player = player.copyWith(battlesWon: player.battlesWon + 1);
     checkAchievements();

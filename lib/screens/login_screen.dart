@@ -34,6 +34,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                      // TODO: Replace demo navigation with Firebase Authentication login.
                       onPressed: () =>
                           Navigator.pushReplacementNamed(context, '/home'),
                       style: ElevatedButton.styleFrom(
@@ -66,6 +67,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   TextButton.icon(
+                    // TODO: Connect this button to Firebase Google Sign-In.
                     onPressed: () {},
                     icon: const Icon(Icons.login),
                     label: const Text('Continue with Google'),
