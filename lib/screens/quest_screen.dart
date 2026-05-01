@@ -93,10 +93,14 @@ class _QuestScreenState extends State<QuestScreen> {
             // 🎁 Claim Button
             ElevatedButton(
               onPressed: () {
-                GameState.addXp(100);
+                final leveledUp = GameState.addXp(100);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Quest complete! +100 XP added.'),
+                  SnackBar(
+                    content: Text(
+                      leveledUp
+                          ? 'Quest complete! +100 XP and level up!'
+                          : 'Quest complete! +100 XP added.',
+                    ),
                   ),
                 );
                 Navigator.pushReplacementNamed(context, '/home');

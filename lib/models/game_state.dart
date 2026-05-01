@@ -36,20 +36,23 @@ class GameState {
     }
   }
 
-  static void addXp(int amount) {
+  static bool addXp(int amount) {
     int newXp = player.currentXp + amount;
     int newLevel = player.level;
     int maxXp = player.maxXp;
+    bool leveledUp = false;
 
     // Level up logic
     if (newXp >= maxXp) {
       newXp = newXp - maxXp;
       newLevel++;
       maxXp += 500; // scaling difficulty
+      leveledUp = true;
     }
 
     player = player.copyWith(currentXp: newXp, level: newLevel, maxXp: maxXp);
     checkAchievements();
+    return leveledUp;
   }
 
   static void addBattleWin() {

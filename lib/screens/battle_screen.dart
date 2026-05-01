@@ -53,9 +53,11 @@ class _BattleScreenState extends State<BattleScreen> {
 
       if (enemyHp == 0) {
         xpEarned += 200;
-        GameState.addXp(200);
+        final leveledUp = GameState.addXp(200);
         GameState.addBattleWin();
-        battleMessage = 'Victory! You defeated the enemy and earned 200 XP.';
+        battleMessage = leveledUp
+            ? 'Victory! You earned 200 XP and leveled up!'
+            : 'Victory! You defeated the enemy and earned 200 XP.';
         return;
       }
 
@@ -78,9 +80,11 @@ class _BattleScreenState extends State<BattleScreen> {
 
       if (enemyHp == 0) {
         xpEarned += 250;
-        GameState.addXp(250);
+        final leveledUp = GameState.addXp(250);
         GameState.addBattleWin();
-        battleMessage = 'Special move finished the enemy! +250 XP earned.';
+        battleMessage = leveledUp
+            ? 'Special move finished the enemy! +250 XP and level up!'
+            : 'Special move finished the enemy! +250 XP earned.';
       } else {
         battleMessage = 'You used Step Strike and dealt 35 damage!';
       }
