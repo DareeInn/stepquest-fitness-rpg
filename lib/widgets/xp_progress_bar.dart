@@ -18,6 +18,8 @@ class XpProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeProgress = progress.clamp(0.0, 1.0);
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -44,12 +46,19 @@ class XpProgressBar extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          LinearProgressIndicator(
-            value: progress.clamp(0.0, 1.0),
-            minHeight: 10,
-            borderRadius: BorderRadius.circular(20),
-            backgroundColor: Colors.white12,
-            valueColor: AlwaysStoppedAnimation<Color>(color),
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: safeProgress),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, child) {
+              return LinearProgressIndicator(
+                value: value,
+                minHeight: 10,
+                borderRadius: BorderRadius.circular(20),
+                backgroundColor: Colors.white12,
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+              );
+            },
           ),
         ],
       ),
