@@ -92,21 +92,15 @@ class _QuestScreenState extends State<QuestScreen> {
             ),
             // 🎁 Claim Button
             ElevatedButton(
-              onPressed:
-                  claimedQuests.contains(selectedQuest) ||
-                      !canClaimReward(selectedQuest, steps)
-                  ? null
-                  : () {
-                      setState(() {
-                        claimedQuests.add(selectedQuest);
-                        GameState.addXp(100);
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Reward Claimed! +100 XP"),
-                        ),
-                      );
-                    },
+              onPressed: () {
+                GameState.addXp(100);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Quest complete! +100 XP added.'),
+                  ),
+                );
+                Navigator.pushReplacementNamed(context, '/home');
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
                 foregroundColor: Colors.black,
