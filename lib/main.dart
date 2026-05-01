@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'services/audio_service.dart';
+
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/quest_screen.dart';
@@ -7,8 +9,10 @@ import 'screens/battle_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const StepQuestApp());
+  StepQuestAudioService.init();
 }
 
 class StepQuestApp extends StatelessWidget {
