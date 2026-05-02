@@ -8,7 +8,7 @@ class StepQuestAudioService {
 
   static final AudioPlayer _player = AudioPlayer();
 
-  static double volume = 0.4;
+  static double volume = 1.0;
   static bool isMuted = false;
   static MusicTrack? _currentTrack;
 
@@ -23,8 +23,11 @@ class StepQuestAudioService {
     }
   }
 
-  static Future<void> playTrack(MusicTrack track) async {
-    if (_currentTrack == track) return;
+  static Future<void> playTrack(
+    MusicTrack track, {
+    bool forceRestart = false,
+  }) async {
+    if (_currentTrack == track && !forceRestart) return;
 
     try {
       _currentTrack = track;
@@ -33,7 +36,7 @@ class StepQuestAudioService {
       await _player.setLoopMode(LoopMode.one);
       await _player.setVolume(isMuted ? 0 : volume);
       await _player.play();
-    } catch (_) {
+    } catch (error) {
       _currentTrack = null;
     }
   }

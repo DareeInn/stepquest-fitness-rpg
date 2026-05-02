@@ -22,12 +22,12 @@ class _IntroVideoScreenState extends State<IntroVideoScreen> {
   @override
   void initState() {
     super.initState();
-    print('IntroVideoScreen initState called');
 
     StepQuestAudioService.playTrack(MusicTrack.intro);
 
     _controller = VideoPlayerController.asset(
       'assets/videos/stepquest_intro.mp4',
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
 
     _setupVideo();
@@ -35,56 +35,34 @@ class _IntroVideoScreenState extends State<IntroVideoScreen> {
 
   Future<void> _setupVideo() async {
     try {
-      debugPrint('Initializing video controller...');
       await _controller.initialize();
-      debugPrint('Video controller initialized.');
 
       if (!mounted) return;
 
-      await _controller.setLooping(true); // Loop video
-      debugPrint('Looping set to true.');
-      await _controller.setVolume(0); // Always mute video audio
-      debugPrint('Volume set to 0.');
+      await _controller.setLooping(true);
+      await _controller.setVolume(0); // video always muted
 
       setState(() => _isReady = true);
-      debugPrint(
-        'Video initialized: size=[38;5;2m${_controller.value.size}, duration=${_controller.value.duration}, isInitialized=${_controller.value.isInitialized}',
-      );
 
       await _controller.play();
-      debugPrint(
-        'Video play() called. isPlaying=${_controller.value.isPlaying}',
-      );
-      setState(() {});
-
-      _controller.addListener(_videoListener);
     } catch (error) {
       if (!mounted) return;
       setState(() {
         _hasError = true;
         _errorMsg = error.toString();
       });
-      debugPrint('Video failed to initialize: $error');
     }
   }
 
   void _videoListener() {
     if (!_controller.value.isInitialized || _hasNavigated) return;
-    // Always force video playback if paused
-    if (!_controller.value.hasError && !_controller.value.isPlaying) {
-      _controller.play();
-    }
+
     if (_controller.value.hasError) {
       setState(() {
         _hasError = true;
         _errorMsg = _controller.value.errorDescription;
       });
-      debugPrint(
-        'Video controller error: ${_controller.value.errorDescription}',
-      );
-      return;
     }
-    // No auto-navigation
   }
 
   void _goToLogin() {
@@ -136,7 +114,7 @@ class _IntroVideoScreenState extends State<IntroVideoScreen> {
           SizedBox.expand(
             child: _isReady
                 ? FittedBox(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
                     child: SizedBox(
                       width: _controller.value.size.width,
                       height: _controller.value.size.height,
