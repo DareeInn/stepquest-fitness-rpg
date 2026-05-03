@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "679679396350-hnlkngeajk68dh3n5vlp7bnu7qjo75i1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stepquest_fitness_rpg",
+            "certificate_hash": "3456e597531f7bece208358756e052cf1103dfc5"
+          }
+        },
+        {
           "client_id": "679679396350-r8m31fjujpk55tua8rlf865l7f0ktg3a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
