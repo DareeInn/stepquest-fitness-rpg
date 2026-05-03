@@ -15,6 +15,7 @@ class GameState {
     battlesWon: 12,
     totalSteps: 120000,
     achievements: ['3-Day Streak'],
+    avatarPath: 'assets/avatars/avatar1.png',
   );
 
   static void unlockAchievement(String achievement) {
