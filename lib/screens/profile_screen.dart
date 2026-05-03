@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../widgets/stat_card.dart';
 import '../models/game_state.dart';
 import '../services/audio_service.dart';
-import '../services/auth_service.dart';
 import '../models/player_stats.dart';
 import '../services/user_profile_service.dart';
+import '../services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -90,7 +90,6 @@ class _IntroVideoScreenState extends State<IntroVideoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('IntroVideoScreen build called');
     if (_hasError) {
       return Scaffold(
         backgroundColor: Colors.black,

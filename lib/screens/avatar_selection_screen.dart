@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/game_state.dart';
 
 class AvatarSelectionScreen extends StatelessWidget {
+  AvatarSelectionScreen({Key? key}) : super(key: key);
+
   final List<String> avatars = [
     'assets/avatars/avatar1.png',
     'assets/avatars/avatar2.png',
