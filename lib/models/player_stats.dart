@@ -1,6 +1,7 @@
 class PlayerStats {
   const PlayerStats({
     required this.name,
+    required this.avatar,
     required this.level,
     required this.currentXp,
     required this.maxXp,
@@ -13,6 +14,7 @@ class PlayerStats {
   });
 
   final String name;
+  final String avatar;
   final int level;
   final int currentXp;
   final int maxXp;
@@ -23,11 +25,28 @@ class PlayerStats {
   final int totalSteps;
   final List<String> achievements;
 
-  double get xpProgress => currentXp / maxXp;
-  double get stepProgress => stepsToday / stepGoal;
+  double get xpProgress => maxXp == 0 ? 0 : currentXp / maxXp;
+  double get stepProgress => stepGoal == 0 ? 0 : stepsToday / stepGoal;
+
+  factory PlayerStats.fromMap(Map<String, dynamic> data) {
+    return PlayerStats(
+      name: data['name'] ?? 'StepQuest Player',
+      avatar: data['avatar'] ?? 'default_avatar',
+      level: data['level'] ?? 1,
+      currentXp: data['xp'] ?? 0,
+      maxXp: data['maxXp'] ?? 100,
+      stepsToday: data['stepsToday'] ?? 0,
+      stepGoal: data['stepGoal'] ?? 10000,
+      streakDays: data['streakDays'] ?? 0,
+      battlesWon: data['battlesWon'] ?? 0,
+      totalSteps: data['totalSteps'] ?? 0,
+      achievements: List<String>.from(data['achievements'] ?? []),
+    );
+  }
 
   PlayerStats copyWith({
     String? name,
+    String? avatar,
     int? level,
     int? currentXp,
     int? maxXp,
@@ -40,6 +59,7 @@ class PlayerStats {
   }) {
     return PlayerStats(
       name: name ?? this.name,
+      avatar: avatar ?? this.avatar,
       level: level ?? this.level,
       currentXp: currentXp ?? this.currentXp,
       maxXp: maxXp ?? this.maxXp,
