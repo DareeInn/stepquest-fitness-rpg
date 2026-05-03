@@ -7,48 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:679679396350:android:4177a631e53872b04298af",
-        "android_client_info": {
-          "package_name": "com.appdev.stepquest"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "679679396350-g413drt2iu3u1e14t0g8euqknqd4qhhv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDfyjjHkdDMJxRZIxuDX-0kdhVtku_Tpuc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "679679396350-g413drt2iu3u1e14t0g8euqknqd4qhhv.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "679679396350-fvq8l614p0mfgri3psuta6s3jbf3ffmf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.stepquestFitnessRpg"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:679679396350:android:3741299fd52c5c6c4298af",
         "android_client_info": {
           "package_name": "com.example.stepquest_fitness_rpg"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "679679396350-r8m31fjujpk55tua8rlf865l7f0ktg3a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stepquest_fitness_rpg",
+            "certificate_hash": "76a775a01b68dcaa20749ceee436025da8919830"
+          }
+        },
         {
           "client_id": "679679396350-g413drt2iu3u1e14t0g8euqknqd4qhhv.apps.googleusercontent.com",
           "client_type": 3
