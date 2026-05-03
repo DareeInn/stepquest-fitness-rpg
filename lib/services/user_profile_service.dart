@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/player_stats.dart';
 
 class UserProfileService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -26,6 +27,22 @@ class UserProfileService {
       'achievements': [],
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  static Stream<PlayerStats?> watchCurrentUserProfile() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Stream.value(null);
+    }
+
+    return _db.collection('users').doc(user.uid).snapshots().map((snapshot) {
+      if (!snapshot.exists || snapshot.data() == null) {
+        return null;
+      }
+
+      return PlayerStats.fromMap(snapshot.data()!);
     });
   }
 }

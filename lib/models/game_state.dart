@@ -5,6 +5,7 @@ import 'player_stats.dart';
 class GameState {
   static PlayerStats player = const PlayerStats(
     name: "Darin",
+    avatar: 'default_avatar',
     level: 5,
     currentXp: 1200,
     maxXp: 1500,
