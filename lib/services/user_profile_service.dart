@@ -45,4 +45,30 @@ class UserProfileService {
       return PlayerStats.fromMap(snapshot.data()!);
     });
   }
+
+  static Future<void> updateXpAndLevel({
+    required int xp,
+    required int level,
+    required int maxXp,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    await _db.collection('users').doc(user.uid).update({
+      'xp': xp,
+      'level': level,
+      'maxXp': maxXp,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  static Future<void> incrementBattleWins() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    await _db.collection('users').doc(user.uid).update({
+      'battlesWon': FieldValue.increment(1),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

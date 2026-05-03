@@ -1,4 +1,5 @@
 import 'player_stats.dart';
+import '../services/user_profile_service.dart';
 
 // Temporary local state for frontend development.
 // Later, Sanaul's Firebase layer can replace this with Firestore user data.
@@ -56,13 +57,23 @@ class GameState {
     }
 
     player = player.copyWith(currentXp: newXp, level: newLevel, maxXp: maxXp);
+
+    UserProfileService.updateXpAndLevel(
+      xp: newXp,
+      level: newLevel,
+      maxXp: maxXp,
+    );
+
     checkAchievements();
     return leveledUp;
   }
 
-  // TODO: Save battle win count to Firestore after Firebase integration.
+  // DONE: Save battle win count to Firestore after Firebase integration.
   static void addBattleWin() {
     player = player.copyWith(battlesWon: player.battlesWon + 1);
+
+    UserProfileService.incrementBattleWins();
+
     checkAchievements();
   }
 }
