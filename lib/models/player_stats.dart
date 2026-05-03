@@ -11,7 +11,7 @@ class PlayerStats {
     required this.battlesWon,
     required this.totalSteps,
     required this.achievements,
-    required this.avatarPath,
+    this.avatarPath = "default_avatar.png",
   });
 
   final String name;
@@ -43,6 +43,7 @@ class PlayerStats {
       battlesWon: data['battlesWon'] ?? 0,
       totalSteps: data['totalSteps'] ?? 0,
       achievements: List<String>.from(data['achievements'] ?? []),
+      avatarPath: data['avatarPath'] ?? 'default_avatar.png',
     );
   }
 
