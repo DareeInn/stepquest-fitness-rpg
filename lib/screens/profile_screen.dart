@@ -31,10 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             tooltip: 'Logout',
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await AuthService.signOut();
-
-              if (!context.mounted) return;
-
+              // TODO: Replace with FirebaseAuth.instance.signOut()
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/login',
