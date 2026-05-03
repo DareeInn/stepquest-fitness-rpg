@@ -9,6 +9,7 @@ import 'screens/battle_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/intro_video_screen.dart';
+import 'screens/auth_gate.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +36,8 @@ class StepQuestApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const IntroVideoScreen(),
+        '/': (context) => const AuthGate(),
+        '/intro': (context) => const IntroVideoScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/quest': (context) => QuestScreen(),
