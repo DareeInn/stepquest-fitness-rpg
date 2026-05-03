@@ -43,6 +43,50 @@ class Quest {
 
 class _QuestScreenState extends State<QuestScreen> {
   List<Quest> quests = [];
+  final List<Quest> questTemplates = [
+    Quest(
+      title: "Walk 5,000 steps",
+      description: "Take at least 5,000 steps today.",
+      rewardXp: 100,
+      completed: false,
+      claimed: false,
+    ),
+    Quest(
+      title: "Win 1 battle",
+      description: "Win a battle today.",
+      rewardXp: 120,
+      completed: false,
+      claimed: false,
+    ),
+    Quest(
+      title: "Earn 200 XP",
+      description: "Earn at least 200 XP today.",
+      rewardXp: 150,
+      completed: false,
+      claimed: false,
+    ),
+    Quest(
+      title: "Complete daily login",
+      description: "Log in today to claim your reward!",
+      rewardXp: 50,
+      completed: false,
+      claimed: false,
+    ),
+    Quest(
+      title: "Burn 300 calories",
+      description: "Burn at least 300 calories today.",
+      rewardXp: 80,
+      completed: false,
+      claimed: false,
+    ),
+    Quest(
+      title: "Reach 10,000 steps",
+      description: "Take at least 10,000 steps today.",
+      rewardXp: 200,
+      completed: false,
+      claimed: false,
+    ),
+  ];
 
   @override
   void initState() {
@@ -50,34 +94,10 @@ class _QuestScreenState extends State<QuestScreen> {
     StepQuestAudioService.playTrack(MusicTrack.dashboard);
     final player = GameState.player;
     quests = [
-      Quest(
-        title: "Walk 5,000 steps",
-        description: "Take at least 5,000 steps today.",
-        rewardXp: 100,
-        completed: player.stepsToday >= 5000,
-        claimed: false,
-      ),
-      Quest(
-        title: "Win 1 battle",
-        description: "Win a battle today.",
-        rewardXp: 120,
-        completed: player.battlesWon >= 1,
-        claimed: false,
-      ),
-      Quest(
-        title: "Earn 200 XP",
-        description: "Earn at least 200 XP today.",
-        rewardXp: 150,
-        completed: player.currentXp >= 200,
-        claimed: false,
-      ),
-      Quest(
-        title: "Complete daily login",
-        description: "Log in today to claim your reward!",
-        rewardXp: 50,
-        completed: true, // Always true for demo
-        claimed: false,
-      ),
+      questTemplates[0].copyWith(completed: player.stepsToday >= 5000),
+      questTemplates[1].copyWith(completed: player.battlesWon >= 1),
+      questTemplates[2].copyWith(completed: player.currentXp >= 200),
+      questTemplates[3].copyWith(completed: true), // Daily login
     ];
   }
 
@@ -95,7 +115,34 @@ class _QuestScreenState extends State<QuestScreen> {
         ),
       ),
     );
+    // Replace with a new random quest
+    setState(() {
+      quests[index] = _generateRandomQuest();
+    });
     Navigator.pushReplacementNamed(context, '/home');
+  }
+
+  Quest _generateRandomQuest() {
+    final player = GameState.player;
+    final currentTitles = quests.map((q) => q.title).toSet();
+    final available = questTemplates.where((q) => !currentTitles.contains(q.title)).toList();
+    if (available.isEmpty) return questTemplates[0];
+    final random = available[(available.length * (DateTime.now().millisecondsSinceEpoch % 1000) / 1000).floor()];
+    // Update completed status based on player state
+    if (random.title == "Walk 5,000 steps") {
+      return random.copyWith(completed: player.stepsToday >= 5000, claimed: false);
+    } else if (random.title == "Win 1 battle") {
+      return random.copyWith(completed: player.battlesWon >= 1, claimed: false);
+    } else if (random.title == "Earn 200 XP") {
+      return random.copyWith(completed: player.currentXp >= 200, claimed: false);
+    } else if (random.title == "Complete daily login") {
+      return random.copyWith(completed: true, claimed: false);
+    } else if (random.title == "Burn 300 calories") {
+      return random.copyWith(completed: false, claimed: false);
+    } else if (random.title == "Reach 10,000 steps") {
+      return random.copyWith(completed: player.stepsToday >= 10000, claimed: false);
+    }
+    return random.copyWith(claimed: false);
   }
 
   @override
@@ -186,7 +233,10 @@ class _QuestScreenState extends State<QuestScreen> {
                       title: Text(quest.title),
                       subtitle: Text(quest.description),
                       trailing: quest.claimed
-                          ? const Icon(Icons.verified, color: Colors.greenAccent)
+                          ? const Icon(
+                              Icons.verified,
+                              color: Colors.greenAccent,
+                            )
                           : ElevatedButton(
                               onPressed: quest.completed && !quest.claimed
                                   ? () => _claimQuest(index)
