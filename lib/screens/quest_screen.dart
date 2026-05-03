@@ -9,15 +9,93 @@ class QuestScreen extends StatefulWidget {
   State<QuestScreen> createState() => _QuestScreenState();
 }
 
+class Quest {
+  final String title;
+  final String description;
+  final int rewardXp;
+  final bool completed;
+  final bool claimed;
+
+  Quest({
+    required this.title,
+    required this.description,
+    required this.rewardXp,
+    required this.completed,
+    required this.claimed,
+  });
+
+  Quest copyWith({
+    String? title,
+    String? description,
+    int? rewardXp,
+    bool? completed,
+    bool? claimed,
+  }) {
+    return Quest(
+      title: title ?? this.title,
+      description: description ?? this.description,
+      rewardXp: rewardXp ?? this.rewardXp,
+      completed: completed ?? this.completed,
+      claimed: claimed ?? this.claimed,
+    );
+  }
+}
+
 class _QuestScreenState extends State<QuestScreen> {
-  int selectedQuest = 0;
-  // Track which quests have been claimed
-  final Set<int> claimedQuests = {};
+  List<Quest> quests = [];
 
   @override
   void initState() {
     super.initState();
     StepQuestAudioService.playTrack(MusicTrack.dashboard);
+    final player = GameState.player;
+    quests = [
+      Quest(
+        title: "Walk 5,000 steps",
+        description: "Take at least 5,000 steps today.",
+        rewardXp: 100,
+        completed: player.stepsToday >= 5000,
+        claimed: false,
+      ),
+      Quest(
+        title: "Win 1 battle",
+        description: "Win a battle today.",
+        rewardXp: 120,
+        completed: player.battlesWon >= 1,
+        claimed: false,
+      ),
+      Quest(
+        title: "Earn 200 XP",
+        description: "Earn at least 200 XP today.",
+        rewardXp: 150,
+        completed: player.currentXp >= 200,
+        claimed: false,
+      ),
+      Quest(
+        title: "Complete daily login",
+        description: "Log in today to claim your reward!",
+        rewardXp: 50,
+        completed: true, // Always true for demo
+        claimed: false,
+      ),
+    ];
+  }
+
+  void _claimQuest(int index) {
+    setState(() {
+      quests[index] = quests[index].copyWith(claimed: true);
+    });
+    final leveledUp = GameState.addXp(quests[index].rewardXp);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          leveledUp
+              ? 'Quest complete! +${quests[index].rewardXp} XP and level up!'
+              : 'Quest complete! +${quests[index].rewardXp} XP added.',
+        ),
+      ),
+    );
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
@@ -31,7 +109,7 @@ class _QuestScreenState extends State<QuestScreen> {
       backgroundColor: const Color(0xFF101018),
       appBar: AppBar(
         backgroundColor: const Color(0xFF101018),
-        title: const Text("Daily Quest"),
+        title: const Text("Daily Quests"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(18),
@@ -89,45 +167,39 @@ class _QuestScreenState extends State<QuestScreen> {
             const SizedBox(height: 20),
             // ✅ Quest List
             Expanded(
-              child: ListView(
-                children: [
-                  _questItem(0, "Walk 5,000 steps", steps >= 5000),
-                  _questItem(1, "Reach 10,000 steps", steps >= 10000),
-                  _questItem(2, "Burn 300 calories", false),
-                ],
-              ),
-            ),
-            // 🎁 Claim Button
-            ElevatedButton(
-              onPressed: () {
-                final leveledUp = GameState.addXp(100);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      leveledUp
-                          ? 'Quest complete! +100 XP and level up!'
-                          : 'Quest complete! +100 XP added.',
+              child: ListView.builder(
+                itemCount: quests.length,
+                itemBuilder: (context, index) {
+                  final quest = quests[index];
+                  return Card(
+                    color: const Color(0xFF1A1A27),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      leading: Icon(
+                        quest.completed
+                            ? Icons.check_circle
+                            : Icons.radio_button_unchecked,
+                        color: quest.completed
+                            ? Colors.greenAccent
+                            : Colors.white30,
+                      ),
+                      title: Text(quest.title),
+                      subtitle: Text(quest.description),
+                      trailing: quest.claimed
+                          ? const Icon(Icons.verified, color: Colors.greenAccent)
+                          : ElevatedButton(
+                              onPressed: quest.completed && !quest.claimed
+                                  ? () => _claimQuest(index)
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.greenAccent,
+                                foregroundColor: Colors.black,
+                              ),
+                              child: Text('Claim +${quest.rewardXp} XP'),
+                            ),
                     ),
-                  ),
-                );
-                Navigator.pushReplacementNamed(context, '/home');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.greenAccent,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 40,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-              child: Text(
-                claimedQuests.contains(selectedQuest)
-                    ? "Reward Claimed"
-                    : "Claim Reward",
-                style: const TextStyle(fontSize: 16),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 12),
@@ -153,32 +225,5 @@ class _QuestScreenState extends State<QuestScreen> {
         Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
-  }
-
-  Widget _questItem(int index, String title, bool completed) {
-    return ListTile(
-      leading: Icon(
-        completed ? Icons.check_circle : Icons.radio_button_unchecked,
-        color: completed ? Colors.greenAccent : Colors.white30,
-      ),
-      title: Text(title),
-      selected: selectedQuest == index,
-      onTap: () {
-        setState(() {
-          selectedQuest = index;
-          // Allow claiming again if switching to a new quest
-        });
-      },
-      trailing: selectedQuest == index
-          ? const Icon(Icons.arrow_right, color: Colors.greenAccent)
-          : null,
-    );
-  }
-
-  bool canClaimReward(int quest, int steps) {
-    if (quest == 0 && steps >= 5000) return true;
-    if (quest == 1 && steps >= 10000) return true;
-    // Add more quest logic as needed
-    return false;
   }
 }
