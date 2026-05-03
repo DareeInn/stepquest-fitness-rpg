@@ -125,22 +125,37 @@ class _QuestScreenState extends State<QuestScreen> {
   Quest _generateRandomQuest() {
     final player = GameState.player;
     final currentTitles = quests.map((q) => q.title).toSet();
-    final available = questTemplates.where((q) => !currentTitles.contains(q.title)).toList();
+    final available = questTemplates
+        .where((q) => !currentTitles.contains(q.title))
+        .toList();
     if (available.isEmpty) return questTemplates[0];
-    final random = available[(available.length * (DateTime.now().millisecondsSinceEpoch % 1000) / 1000).floor()];
+    final random =
+        available[(available.length *
+                (DateTime.now().millisecondsSinceEpoch % 1000) /
+                1000)
+            .floor()];
     // Update completed status based on player state
     if (random.title == "Walk 5,000 steps") {
-      return random.copyWith(completed: player.stepsToday >= 5000, claimed: false);
+      return random.copyWith(
+        completed: player.stepsToday >= 5000,
+        claimed: false,
+      );
     } else if (random.title == "Win 1 battle") {
       return random.copyWith(completed: player.battlesWon >= 1, claimed: false);
     } else if (random.title == "Earn 200 XP") {
-      return random.copyWith(completed: player.currentXp >= 200, claimed: false);
+      return random.copyWith(
+        completed: player.currentXp >= 200,
+        claimed: false,
+      );
     } else if (random.title == "Complete daily login") {
       return random.copyWith(completed: true, claimed: false);
     } else if (random.title == "Burn 300 calories") {
       return random.copyWith(completed: false, claimed: false);
     } else if (random.title == "Reach 10,000 steps") {
-      return random.copyWith(completed: player.stepsToday >= 10000, claimed: false);
+      return random.copyWith(
+        completed: player.stepsToday >= 10000,
+        claimed: false,
+      );
     }
     return random.copyWith(claimed: false);
   }
