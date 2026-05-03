@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,13 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: Colors.white70),
                   ),
                   const SizedBox(height: 36),
-                  _inputField('Email', Icons.email),
+                  /*_inputField('Email', Icons.email),
                   const SizedBox(height: 14),
                   _inputField('Password', Icons.lock, obscureText: true),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 24),*/
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
+                    /*child: ElevatedButton(
                       onPressed: () async {
                         await StepQuestAudioService.playTrack(
                           MusicTrack.dashboard,
@@ -63,12 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       child: const Text('Login'),
-                    ),
+                    ),*/
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
-                    child: OutlinedButton(
+                    /*child: OutlinedButton(
                       onPressed: () async {
                         await StepQuestAudioService.playTrack(
                           MusicTrack.dashboard,
@@ -86,14 +87,70 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       child: const Text('Sign Up'),
+                    ),*/
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        final user = await AuthService.signInWithGoogle();
+
+                        if (!context.mounted) return;
+
+                        if (user != null) {
+                          await StepQuestAudioService.playTrack(
+                            MusicTrack.dashboard,
+                          );
+                          Navigator.pushReplacementNamed(context, '/home');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Google Sign-In was cancelled or failed',
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.login),
+                      label: const Text('Continue with Google'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.greenAccent,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  /*const SizedBox(height: 12),
                   TextButton.icon(
-                    // TODO: Connect this button to Firebase Google Sign-In.
-                    onPressed: () {},
+                    // DONE: Connect this button to Firebase Google Sign-In.
+                    onPressed: () async {
+                      final user = await AuthService.signInWithGoogle();
+
+                      if (!context.mounted) return;
+
+                      if (user != null) {
+                        await StepQuestAudioService.playTrack(
+                          MusicTrack.dashboard,
+                        );
+                        Navigator.pushReplacementNamed(context, '/home');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Google Sign-In was cancelled or failed.',
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     icon: const Icon(Icons.login),
                     label: const Text('Continue with Google'),
+                  ),*/
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Sign in to start your adventure",
+                    style: TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
