@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../services/audio_service.dart';
-import 'login_screen.dart';
 
 class IntroVideoScreen extends StatefulWidget {
   const IntroVideoScreen({super.key});
@@ -70,15 +69,7 @@ class _IntroVideoScreenState extends State<IntroVideoScreen> {
 
     _hasNavigated = true;
 
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 700),
-        pageBuilder: (_, animation, __) => const LoginScreen(),
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
+    Navigator.pushReplacementNamed(context, '/auth');
   }
 
   @override
