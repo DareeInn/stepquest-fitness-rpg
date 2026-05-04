@@ -71,4 +71,66 @@ class UserProfileService {
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }
+
+  static Future<void> updateLoginStreak() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final userRef = _db.collection('users').doc(user.uid);
+    final snapshot = await userRef.get();
+
+    if (!snapshot.exists || snapshot.data() == null) return;
+
+    final data = snapshot.data()!;
+
+    final today = DateTime.now();
+    final todayStr = "${today.year}-${today.month}-${today.day}";
+
+    final lastLoginStr = data['lastLoginDate'] as String?;
+    int currentStreak = data['currentStreak'] ?? 0;
+    int longestStreak = data['longestStreak'] ?? 0;
+
+    if (lastLoginStr == null) {
+      currentStreak = 1;
+    } else {
+      final lastDateParts = lastLoginStr.split('-');
+      final lastDate = DateTime(
+        int.parse(lastDateParts[0]),
+        int.parse(lastDateParts[1]),
+        int.parse(lastDateParts[2]),
+      );
+
+      final difference = today.difference(lastDate).inDays;
+
+      if (difference == 0) {
+        return; // already counted today
+      } else if (difference == 1) {
+        currentStreak += 1;
+      } else {
+        currentStreak = 1; // streak reset
+      }
+    }
+
+    if (currentStreak > longestStreak) {
+      longestStreak = currentStreak;
+    }
+
+    await userRef.update({
+      'lastLoginDate': todayStr,
+      'currentStreak': currentStreak,
+      'longestStreak': longestStreak,
+      'streakDays': currentStreak,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  static Future<PlayerStats?> getCurrentUserProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+
+    final doc = await _db.collection('users').doc(user.uid).get();
+    if (!doc.exists || doc.data() == null) return null;
+
+    return PlayerStats.fromMap(doc.data()!);
+  }
 }

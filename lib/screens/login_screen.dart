@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import '../services/auth_service.dart';
 import '../services/user_profile_service.dart';
+import '../services/achievement_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -53,6 +54,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         if (user != null) {
                           await UserProfileService.createProfileIfNeeded(user);
+                          await UserProfileService.updateLoginStreak();
+                          final player =
+                              await UserProfileService.getCurrentUserProfile();
+                          if (player != null) {
+                            await AchievementService.checkAndUnlock(player);
+                          }
                           await StepQuestAudioService.playTrack(
                             MusicTrack.dashboard,
                           );

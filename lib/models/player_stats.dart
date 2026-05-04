@@ -39,7 +39,7 @@ class PlayerStats {
       maxXp: data['maxXp'] ?? 100,
       stepsToday: data['stepsToday'] ?? 0,
       stepGoal: data['stepGoal'] ?? 10000,
-      streakDays: data['streakDays'] ?? 0,
+      streakDays: data['currentStreak'] ?? data['streakDays'] ?? 0,
       battlesWon: data['battlesWon'] ?? 0,
       totalSteps: data['totalSteps'] ?? 0,
       achievements: List<String>.from(data['achievements'] ?? []),
