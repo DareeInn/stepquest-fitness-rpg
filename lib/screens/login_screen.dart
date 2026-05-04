@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           await StepQuestAudioService.playTrack(
                             MusicTrack.dashboard,
                           );
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/auth');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
