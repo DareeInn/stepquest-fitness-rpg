@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/quest.dart';
-import '../models/game_state.dart';
 import 'user_profile_service.dart';
+import 'achievement_service.dart';
+import '../models/player_stats.dart';
 
 class QuestService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -69,13 +70,12 @@ class QuestService {
     }
   }
 
-  static Future<void> claimQuestReward(Quest quest) async {
+  static Future<void> claimQuestReward(Quest quest, PlayerStats player) async {
     final questsRef = _questCollection();
     if (questsRef == null) return;
 
     if (quest.claimed) return;
 
-    final player = GameState.player;
     int newXp = player.currentXp + quest.rewardXp;
     int newLevel = player.level;
     int maxXp = player.maxXp;
@@ -97,5 +97,19 @@ class QuestService {
       'claimed': true,
       'claimedAt': FieldValue.serverTimestamp(),
     });
+
+    await AchievementService.unlockAchievement(
+      id: 'first_quest_completed',
+      title: 'First Quest Completed',
+      description: 'Complete and claim your first quest reward.',
+    );
+
+    final updatedPlayer = player.copyWith(
+      currentXp: newXp,
+      level: newLevel,
+      maxXp: maxXp,
+    );
+
+    await AchievementService.checkAndUnlock(updatedPlayer);
   }
 }

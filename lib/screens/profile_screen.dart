@@ -5,6 +5,8 @@ import '../services/audio_service.dart';
 import '../models/player_stats.dart';
 import '../services/user_profile_service.dart';
 import '../services/auth_service.dart';
+import '../models/achievement.dart';
+import '../services/achievement_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -98,11 +100,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.shield,
                   color: Colors.redAccent,
                 ),
-                StatCard(
-                  title: 'Achievements',
-                  value: '${player.achievements.length}',
-                  icon: Icons.emoji_events,
-                  color: Colors.amberAccent,
+                StreamBuilder<List<Achievement>>(
+                  stream: AchievementService.watchAchievements(),
+                  builder: (context, achievementSnapshot) {
+                    final achievements = achievementSnapshot.data ?? [];
+
+                    return StatCard(
+                      title: 'Achievements',
+                      value: '${achievements.length}',
+                      icon: Icons.emoji_events,
+                      color: Colors.amberAccent,
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 24),
@@ -114,8 +123,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                for (final achievement in player.achievements)
-                  _achievement(achievement),
+                StreamBuilder<List<Achievement>>(
+                  stream: AchievementService.watchAchievements(),
+                  builder: (context, achievementSnapshot) {
+                    final achievements = achievementSnapshot.data ?? [];
+
+                    if (achievements.isEmpty) {
+                      return const Text(
+                        'No achievements unlocked yet.',
+                        style: TextStyle(color: Colors.white70),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        for (final achievement in achievements)
+                          _achievement(
+                            achievement.title,
+                            subtitle: achievement.description,
+                          ),
+                      ],
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 24),
                 const Text(
@@ -149,10 +179,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _achievement(String title) {
+  Widget _achievement(String title, {String? subtitle}) {
     return ListTile(
       leading: const Icon(Icons.emoji_events, color: Colors.amber),
       title: Text(title),
+      subtitle: subtitle == null || subtitle.isEmpty ? null : Text(subtitle),
     );
   }
 }
